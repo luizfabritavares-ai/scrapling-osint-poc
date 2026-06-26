@@ -17,5 +17,6 @@ EXPOSE 8080
 # Precisamos LIMPAR isso, senão o container roda "scrapling <nosso CMD>" e crasha
 # com: Error: No such command '/bin/sh'.
 ENTRYPOINT []
-# ${PORT:-8080}: usa a porta do Railway se houver, senão 8080 (alvo do domínio).
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+# python3 -m uvicorn evita depender do console script no PATH da imagem base.
+# Porta fixa 8080 (= alvo do domínio gerado no Railway).
+CMD ["python3", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
