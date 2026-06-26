@@ -13,5 +13,9 @@ COPY main.py .
 ENV PORT=8080
 EXPOSE 8080
 
-# shell-form pra expandir $PORT
-CMD uvicorn main:app --host 0.0.0.0 --port ${PORT}
+# A imagem base do Scrapling define ENTRYPOINT ["scrapling"] (a CLI dela).
+# Precisamos LIMPAR isso, senão o container roda "scrapling <nosso CMD>" e crasha
+# com: Error: No such command '/bin/sh'.
+ENTRYPOINT []
+# ${PORT:-8080}: usa a porta do Railway se houver, senão 8080 (alvo do domínio).
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
